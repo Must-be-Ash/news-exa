@@ -7,7 +7,7 @@ Outputs a terminal summary, a styled HTML report, and an audio narration — all
 ## Install
 
 ```bash
-npx @anthropic-ai/claude-code skill add https://github.com/Must-be-Ash/daily-news
+npx skills add https://github.com/Must-be-Ash/daily-news
 ```
 
 ## Prerequisites
