@@ -28,12 +28,11 @@ Need ≥$0.15 USDC on Base (10 searches × $0.01 + audio ~$0.015). If insufficie
 
 ### Step 1b — Confirm spend
 
-Before making any paid API calls, use AskUserQuestion to confirm:
+Print this message to the user and STOP. Wait for their typed reply before continuing:
 
-Question: "This briefing will make 10 paid Tavily searches (~$0.10 USDC from your Awal wallet). Proceed?"
-Options: "Yes, run the searches" / "No, cancel"
+"This will run 10 paid Tavily searches (~$0.10 USDC from your Awal wallet). Type **yes** to proceed."
 
-If the user declines, stop. This step is required — it ensures the user explicitly authorizes the x402 payments, which prevents the auto-mode classifier from blocking the calls.
+Do NOT use AskUserQuestion — the user must type a real message so the auto-mode classifier recognizes it as explicit authorization for the x402 payments. Do not proceed to Step 2 until the user replies.
 
 ### Step 2 — Run 10 Tavily searches
 
