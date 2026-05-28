@@ -12,7 +12,7 @@ npx skills add https://github.com/Must-be-Ash/daily-news
 
 ## Prerequisites
 
-- [Awal](https://github.com/anthropics/awal) CLI installed (`npm install -g awal`)
+- **Awal wallet** — install with `npx skills add coinbase/agentic-wallet-skills`, then sign in with `npx awal auth login`
 - Awal wallet funded with USDC on Base (each run costs ~$0.10)
 - macOS (uses built-in `say` for audio narration)
 
