@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<title>Daily News — {{DATE}}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif;background:#efefef;color:#1d1d1f;padding:3rem 1.5rem;max-width:720px;margin:0 auto;-webkit-font-smoothing:antialiased}
+header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid #1d1d1f}
+header h1{font-family:"Libre Baskerville",Georgia,"Times New Roman",serif;font-size:1.6rem;font-weight:700;letter-spacing:-.02em;color:#1d1d1f;margin-bottom:.35rem}
+header .sub{color:#86868b;font-size:.8rem;letter-spacing:.01em}
+.content{background:#fff;border-radius:8px;padding:.5rem 1.5rem;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.section-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#86868b;padding:1.25rem 0 .5rem;border-bottom:1px solid #f0f0f0;margin-bottom:0}
+article{padding:1.25rem 0;border-bottom:1px solid #d8d8d8}
+article:last-of-type{border-bottom:none}
+.signal-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
+.signal-num{font-size:.7rem;font-weight:600;color:#86868b;font-variant-numeric:tabular-nums;min-width:1.4rem}
+.cat{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:.2rem .5rem;border-radius:3px}
+.cat-science{background:#e3f2fd;color:#1565c0}
+.cat-health{background:#e8f5e9;color:#2e7d32}
+.cat-economy{background:#fff3e0;color:#e65100}
+.cat-events{background:#fce4ec;color:#c62828}
+.cat-tech{background:#ede7f6;color:#4527a0}
+h2{font-size:1.05rem;font-weight:600;line-height:1.4;color:#1d1d1f;margin-bottom:.5rem;letter-spacing:-.01em}
+h2 a{color:#1d1d1f;text-decoration:none}
+h2 a:hover{color:#0066cc}
+.summary{font-size:.875rem;color:#424245;line-height:1.65;margin-bottom:.6rem}
+.signal-footer{display:flex;align-items:center;justify-content:flex-end}
+.src{font-size:.7rem;padding:.2rem .5rem;border-radius:3px;text-decoration:none;color:#86868b;border:1px solid #e5e5e5;transition:all .15s}
+.src:hover{color:#1d1d1f;border-color:#1d1d1f}
+footer{margin-top:1.5rem;padding-top:1rem;color:#aeaeb2;font-size:.7rem;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<header>
+  <h1>Daily News</h1>
+  <div class="sub">{{DATE}} · {{SIGNAL_COUNT}} stories · Tavily x402 Search</div>
+</header>
+
+<div class="content">
+{{STORIES}}
+</div>
+
+<footer>
+  <span>Pulse /daily-news</span>
+  <span>Cost: {{COST}}</span>
+</footer>
+</body>
+</html>
