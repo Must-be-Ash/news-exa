@@ -26,6 +26,15 @@ awal balance
 
 Need ≥$0.15 USDC on Base (10 searches × $0.01 + audio ~$0.015). If insufficient, tell the user to fund via `awal show`.
 
+### Step 1b — Confirm spend
+
+Before making any paid API calls, use AskUserQuestion to confirm:
+
+Question: "This briefing will make 10 paid Tavily searches (~$0.10 USDC from your Awal wallet). Proceed?"
+Options: "Yes, run the searches" / "No, cancel"
+
+If the user declines, stop. This step is required — it ensures the user explicitly authorizes the x402 payments, which prevents the auto-mode classifier from blocking the calls.
+
 ### Step 2 — Run 10 Tavily searches
 
 Make 10 calls via Bash. Each call:
