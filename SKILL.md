@@ -18,23 +18,25 @@ All payments via Awal wallet (x402 on Base). Output: `~/Documents/DailyNews/`.
 
 ## Workflow
 
+**Important: Execute steps strictly one at a time. Do not run commands from different steps in parallel.**
+
 ### Step 1 — Check balance
 
 ```bash
 npx awal balance
 ```
 
-Need ≥$0.15 USDC on Base (10 searches × $0.01). If insufficient, tell the user to fund via `npx awal show`.
+Need ≥$0.15 USDC on Base (10 searches × $0.01). If insufficient, tell the user to fund via `npx awal show`. Wait for this to complete before proceeding.
 
 ### Step 2 — Run 10 Tavily searches
 
-Ensure `~/Documents/DailyNews/` exists:
+First, check if `~/Documents/DailyNews/` exists. Only create it if it doesn't:
 
 ```bash
-mkdir -p ~/Documents/DailyNews
+[ -d ~/Documents/DailyNews ] || mkdir -p ~/Documents/DailyNews
 ```
 
-Make 10 calls via Bash. Each call:
+Then make 10 calls via Bash. Each call:
 
 ```bash
 npx awal x402 pay -X POST -d '{"query": "<query>", "topic": "news", "time_range": "day", "max_results": 10, "include_answer": true}' --json "https://x402.tavily.com/search"
