@@ -1,22 +1,31 @@
-# Tavily x402 Endpoint
+# Exa Search API
 
 ## Search
 
-- **URL**: `https://x402.tavily.com/search`
+- **URL**: `https://api.exa.ai/search`
 - **Method**: POST
-- **Protocol**: x402 on Base
-- **Price**: $0.01 USDC per call
-- **Auth**: None — x402 payment replaces API keys
+- **Auth**: `Authorization: Bearer <EXA_API_KEY>`
+- **Price**: ~$0.007–0.01 per search (varies by numResults and contents)
 
-### Request body
+### Optimal request body for news
 
 ```json
 {
-  "query": "scientific breakthroughs announced today",
-  "topic": "news",
-  "time_range": "day",
-  "max_results": 10,
-  "include_answer": true
+  "query": "specific descriptive natural language about articles to find",
+  "type": "auto",
+  "category": "news",
+  "numResults": 10,
+  "startPublishedDate": "2026-05-28T09:40:00.000Z",
+  "includeDomains": ["reuters.com", "bbc.com", "nytimes.com"],
+  "contents": {
+    "text": {
+      "maxCharacters": 1400,
+      "stripLinks": true
+    },
+    "highlights": {
+      "maxCharacters": 320
+    }
+  }
 }
 ```
 
@@ -24,84 +33,50 @@
 
 | Parameter | Type | Description |
 |---|---|---|
-| `query` | string | Search query (1-1000 chars) |
-| `topic` | string | `"news"`, `"general"`, or `"finance"` |
-| `time_range` | string | `"day"`, `"week"`, `"month"`, `"year"` |
-| `max_results` | int | 1-50 results |
-| `include_answer` | bool | Include AI-generated answer summary |
-| `search_depth` | string | Always `"advanced"` on x402 |
-| `include_domains` | list | Restrict to specific domains |
-| `exclude_domains` | list | Exclude specific domains |
+| `query` | string | Natural language description — specific and descriptive, not keyword lists |
+| `type` | string | `"auto"` (recommended), `"fast"`, `"instant"`, `"deep"`, `"deep-lite"`, `"deep-reasoning"` |
+| `category` | string | `"news"`, `"company"`, `"research paper"`, `"people"`, `"personal site"`, `"financial report"` |
+| `numResults` | int | 1–100, defaults to 10 |
+| `startPublishedDate` | string | ISO 8601 datetime — only results published after this |
+| `endPublishedDate` | string | ISO 8601 datetime — only results published before this |
+| `includeDomains` | list | Restrict to these domains |
+| `excludeDomains` | list | Exclude these domains |
+| `maxAgeHours` | int | Cache freshness: 24 = use cache if <24hr old, 0 = always livecrawl, -1 = cache only |
+| `contents.text` | object | Full article text. Options: `maxCharacters`, `stripLinks`, `includeHtmlTags` |
+| `contents.highlights` | object | Key fact excerpts relevant to query. Options: `maxCharacters`, `query` |
+| `contents.summary` | object | LLM-generated abstract. Supports `outputSchema` for structured extraction |
 
 ### Response shape
 
 ```json
 {
-  "query": "...",
-  "answer": "AI-generated summary of results",
+  "requestId": "abc123",
   "results": [
     {
+      "id": "https://...",
       "title": "Article title",
       "url": "https://...",
-      "content": "Extracted article text...",
+      "publishedDate": "2026-05-28T14:30:00.000Z",
       "score": 0.95,
-      "published_date": "Wed, 27 May 2026 11:15:35 GMT"
+      "text": "Clean article text without links...",
+      "highlights": ["Key fact excerpt 1", "Key fact excerpt 2"],
+      "image": "https://...",
+      "favicon": "https://..."
     }
   ],
-  "response_time": 1.9
+  "searchTime": 207.5,
+  "costDollars": {
+    "total": 0.008,
+    "search": {"neural": 0.008}
+  }
 }
 ```
 
-### Awal CLI example
+### Best practices (from Exa docs)
 
-```bash
-awal x402 pay -X POST \
-  -d '{"query": "scientific breakthroughs today", "topic": "news", "time_range": "day", "max_results": 10, "include_answer": true}' \
-  --json "https://x402.tavily.com/search"
-```
-
-With `--json`, the response wraps in `{"status": 200, "data": {...}}`. The Tavily results are in `data`.
-
----
-
-# Dellbot TTS-Nano Endpoint
-
-## Text-to-Speech (Kokoro)
-
-- **URL**: `https://x402.dellbot.win/tts-nano`
-- **Method**: POST
-- **Protocol**: x402 on Base
-- **Price**: $0.005 USDC per call
-- **Max input**: 1000 characters
-- **Returns**: Raw MP3 binary (`audio/mpeg`) — no JSON wrapper
-
-### Request body
-
-```json
-{
-  "input": "Text to speak...",
-  "model": "tts-kokoro",
-  "voice": "af_sky",
-  "response_format": "mp3"
-}
-```
-
-### Parameters
-
-| Parameter | Type | Description |
-|---|---|---|
-| `input` | string | Text to synthesize (max 1000 chars) |
-| `model` | string | `"tts-kokoro"` (only option) |
-| `voice` | string | Voice ID (e.g. `"af_sky"`) |
-| `response_format` | string | `"mp3"`, `"wav"`, `"opus"`, `"aac"`, `"flac"` |
-| `speed` | number | Speech speed multiplier |
-
-### Awal CLI example
-
-```bash
-awal x402 pay -X POST \
-  -d '{"input": "Hello world.", "model": "tts-kokoro", "voice": "af_sky", "response_format": "mp3"}' \
-  "https://x402.dellbot.win/tts-nano" > output.mp3
-```
-
-Response is raw binary — pipe directly to file.
+- **`type: "auto"`** — let Exa pick the best retrieval strategy. Don't use `"neural"` directly.
+- **`category: "news"`** — targets a specialized news index with better relevance for current events.
+- **`highlights`** — "News articles are verbose. Highlights extract the key facts." Essential for agent workflows — 10x more token-efficient than full text.
+- **`text.stripLinks: true`** — removes noisy markdown links from article text.
+- **Queries should be specific** — "AI startup funding announcements" beats "AI news today". Describe the articles you want to find.
+- **`startPublishedDate`** — use full ISO datetime (not just date) for precise 24hr windows.
