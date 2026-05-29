@@ -293,6 +293,7 @@ cat <<'NARRATION' > /tmp/daily-news-narration.txt
 {full narration script here}
 NARRATION
 say -f /tmp/daily-news-narration.txt -o ~/Documents/DailyNews/daily-news-{YYYYMMDD}-{HHMMSS}.aiff
+open ~/Documents/DailyNews/daily-news-{YYYYMMDD}-{HHMMSS}.html
 afplay ~/Documents/DailyNews/daily-news-{YYYYMMDD}-{HHMMSS}.aiff
 ```
 
